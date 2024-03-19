@@ -1,8 +1,8 @@
-var express = require('express');
+const express = require('express');
 
-var app = express();
+const app = express();
 
-var port = process.env.PORT || 3000; //port or default to 3000
+const port = process.env.PORT || 3000; //port or default to 3000
 
 //everytime there's a get request '/' we are going to respond with a function containing 'request' and 'response' (req, res)=>{}
 app.get('/', (req, res)=>{

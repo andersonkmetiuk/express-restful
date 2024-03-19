@@ -17,6 +17,7 @@ First let's initialize the repo with `npm init` to create the `package.json`
 ### Hello World!
 
 Let's create an `app.js` and start coding. Using the code below with the command `node app.js` we can see it running in the url http://localhost:3000
+
 ```
 var express = require('express');
 
@@ -60,3 +61,5 @@ To configure that we are going to use `npm init @eslint/config`. After the confi
     "lint": "eslint .",
   },
 ```
+
+To test the linter we are going to use `npm run lint` and it's going to ask us to change the `var` to `const`
