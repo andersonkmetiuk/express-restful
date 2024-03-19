@@ -34,3 +34,29 @@ app.listen(port, ()=>{
     console.log('Running on port' + port);
 });
 ```
+
+### Tips
+
+For this we have installed `express` using `npm i express`. But we want to install `eslint` only for the dev environment so when the code is deployed somewhere this dependency is not installed. For that we are going to use `npm i eslint -D` so this is going to add as a `devDependencies` in the `package.json` file like so:
+
+```
+"devDependencies": {
+    "eslint": "^8.57.0"
+  }
+```
+
+The linting will be run using the `scripts` instead of installing it globally. For that we are going to add:
+
+```
+"scripts": {
+    "lint": "eslint",
+  },
+```
+
+To configure that we are going to use `npm init @eslint/config`. After the configuration is set we are going to change the lint script to `eslint .` like so:
+
+```
+"scripts": {
+    "lint": "eslint .",
+  },
+```
