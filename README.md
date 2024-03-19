@@ -10,3 +10,6 @@ Course by Jonathan Mills &rarr; [Pluralsight](https://app.pluralsight.com/ilx/vi
 
 REST is not a protocol or a standard, it is an architectural style. During the development phase, API developers can implement REST in a variety of ways. ([Source](https://restfulapi.net))
 
+## Now to code
+
+First let's initialize the repo with `npm init` to create the `package.json`
