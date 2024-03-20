@@ -109,6 +109,8 @@ Just run  `npm start` and it will run on port 4000 (http://localhost:4000) and t
 
 ### Starting to build the api
 
+Developing an HTTP Get request.
+
 This is the url to test it http://localhost:4000/api/books
 
 ```
