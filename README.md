@@ -82,4 +82,27 @@ app.listen(port, () => {
 });
 ```
 
+Added `nodemon`. For this there are two configurations in the `package.json`
 
+```
+  "scripts": {
+    "start": "nodemon app.js",
+  },
+```
+
+and also the configs
+```
+"nodemonConfig": {
+    "restartable": "rs",
+    "ignore": [
+      "node_modules/**/node_modules"
+    ],
+    "delay": 2500,
+    "env": {
+      "NODE_ENV": "development",
+      "PORT": 4000
+    }
+  }
+  ```
+
+Just run  `npm start` and it will run on port 4000 (http://localhost:4000) and this restarts every time you save so you don't need to run it every time. 
