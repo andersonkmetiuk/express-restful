@@ -185,7 +185,7 @@ app.listen(port, () => {
 
 ### Get and Post working
 
-Added `body-parser` to implement post
+Added `body-parser` to implement post. Body parsers adds de body to the request.
 
 ```
 const express = require("express");
