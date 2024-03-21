@@ -16,6 +16,16 @@ bookRouter.route("/books")
       return res.status(500).json(err);
     }
   });
+
+bookRouter.route("/books/:bookId")
+  .get(async (req, res) => {
+  try {
+    const bookIdResult = await Book.findById(req.params.bookId);
+    return res.status(200).json(bookIdResult);
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+});
 app.use("/api", bookRouter);
 
 // every time there's a get request '/' we are going to respond with a function containing 'request' and 'response' (req, res)=>{}
