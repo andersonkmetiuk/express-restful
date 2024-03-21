@@ -8,14 +8,14 @@ const port = process.env.PORT || 3000; // port or default to 3000
 const Book = require("./models/bookModel");
 
 bookRouter.route("/books")
-  .get((req, res) => {
-    Book.find((err, book) => {
-    if (err) {
-      return res.send(err);
+  .get(async(req, res) => {
+    try{
+      const bookResult = await Book.find();
+      return res.status(200).json(bookResult);
+    } catch (err){
+      return res.status(500).json(err);
     }
-    return res.json(book);
   });
-});
 app.use("/api", bookRouter);
 
 // every time there's a get request '/' we are going to respond with a function containing 'request' and 'response' (req, res)=>{}
