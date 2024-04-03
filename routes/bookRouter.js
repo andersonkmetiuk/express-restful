@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const express = require("express");
 
 function routes(Book) {
@@ -8,7 +9,7 @@ function routes(Book) {
     .get(async (req, res) => {
       try {
         const query = {};
-        if(req.query.genre){
+        if (req.query.genre) {
           query.genre = req.query.genre;
         }
         const bookResult = await Book.find(query);
@@ -23,14 +24,30 @@ function routes(Book) {
       return res.status(201).json(book);
     });
 
-  bookRouter.route("/books/:bookId").get(async (req, res) => {
-    try {
-      const bookIdResult = await Book.findById(req.params.bookId);
-      return res.status(200).json(bookIdResult);
-    } catch (err) {
-      return res.status(500).json(err);
-    }
-  });
+  bookRouter
+    .route("/books/:bookId")
+    .get(async (req, res) => {
+      try {
+        const bookIdResult = await Book.findById(req.params.bookId);
+        return res.status(200).json(bookIdResult);
+      } catch (err) {
+        return res.status(500).json(err);
+      }
+    })
+    .put(async (req, res) => {
+      try {
+        const bookIdResult = await Book.findById(req.params.bookId);
+        bookIdResult.title = req.body.title;
+        bookIdResult.author = req.body.author;
+        bookIdResult.genre = req.body.genre;
+        bookIdResult.read = req.body.read;
+        bookIdResult.save();
+
+        return res.status(200).json(bookIdResult);
+      } catch (err) {
+        return res.status(500).json(err);
+      }
+    });
 
   return bookRouter;
 }

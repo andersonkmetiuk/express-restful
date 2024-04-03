@@ -183,7 +183,7 @@ app.listen(port, () => {
 });
 ```
 
-### Get and Post working
+### GET and POST working
 
 Added `body-parser` to implement post. Body parsers adds de body to the request.
 
@@ -257,4 +257,23 @@ Example: localhost:4000/api/books?genre=Fantasy
         return res.status(500).json(err);
       }
     })
+```
+
+# Implementing PUT
+
+```
+    .put(async (req, res) => {
+      try {
+        const bookIdResult = await Book.findById(req.params.bookId);
+        bookIdResult.title = req.body.title;
+        bookIdResult.author = req.body.author;
+        bookIdResult.genre = req.body.genre;
+        bookIdResult.read = req.body.read;
+        bookIdResult.save();
+
+        return res.status(200).json(bookIdResult);
+      } catch (err) {
+        return res.status(500).json(err);
+      }
+    });
 ```
