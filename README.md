@@ -238,3 +238,23 @@ app.listen(port, () => {
 });
 
 ```
+
+### Query filter by Genre
+
+Example: localhost:4000/api/books?genre=Fantasy
+
+```
+  bookRouter
+    .get(async (req, res) => {
+      try {
+        const query = {};
+        if(req.query.genre){
+          query.genre = req.query.genre;
+        }
+        const bookResult = await Book.find(query);
+        return res.status(200).json(bookResult);
+      } catch (err) {
+        return res.status(500).json(err);
+      }
+    })
+```
