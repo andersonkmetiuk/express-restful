@@ -47,6 +47,24 @@ function routes(Book) {
       } catch (err) {
         return res.status(500).json(err);
       }
+    })
+    .patch(async (req, res) => {
+      try {
+        const bookIdResult = await Book.findById(req.params.bookId);
+        if(req.body.title)
+          bookIdResult.title = req.body.title;
+        if(req.body.author)
+          bookIdResult.author = req.body.author;
+        if(req.body.genre) 
+          bookIdResult.genre = req.body.genre;
+        if(req.body.read)
+          bookIdResult.read = req.body.read;
+        bookIdResult.save();
+
+        return res.status(200).json(bookIdResult);
+      } catch (err) {
+        return res.status(500).json(err);
+      }
     });
 
   return bookRouter;
