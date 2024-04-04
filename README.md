@@ -300,3 +300,29 @@ The easy way
       }
     });
 ```
+
+The right way
+```
+    .patch(async (req, res) => {
+      try {
+        const bookIdResult = await Book.findById(req.params.bookId);
+        // This if deletes an id that is sent accidentally so it won't change the ID inside MongoDB
+        // eslint-disable-next-line no-underscore-dangle
+        if (req.body._id) {
+          // eslint-disable-next-line no-underscore-dangle
+          delete req.body._id;
+        }
+
+        Object.entries(req.body).forEach((item) => {
+          const key = item[0];
+          const value = item[1];
+          bookIdResult[key] = value;
+        });
+
+        bookIdResult.save();
+        return res.status(200).json(bookIdResult);
+      } catch (err) {
+        return res.status(500).json(err);
+      }
+    });
+```
