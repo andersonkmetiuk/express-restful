@@ -326,3 +326,16 @@ The right way
       }
     });
 ```
+
+# Implementing DELETE
+
+```
+    .delete(async(req, res) => {
+      try {
+        await Book.findByIdAndDelete(req.params.bookId);
+        return res.sendStatus(204); // No content, successful deletion
+      } catch (err) {
+        return res.status(500).json(err);
+      }
+    });
+```

@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 const express = require("express");
+const mongoose = require("mongoose");
 
 function routes(Book) {
   const bookRouter = express.Router();
@@ -66,6 +67,14 @@ function routes(Book) {
 
         bookIdResult.save();
         return res.status(200).json(bookIdResult);
+      } catch (err) {
+        return res.status(500).json(err);
+      }
+    })
+    .delete(async(req, res) => {
+      try {
+        await Book.findByIdAndDelete(req.params.bookId);
+        return res.sendStatus(204); // No content, successful deletion
       } catch (err) {
         return res.status(500).json(err);
       }
