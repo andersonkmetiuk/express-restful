@@ -25,20 +25,20 @@ function routes(Book) {
       return res.status(201).json(book);
     });
 
-//MIDDLEWARE FUNCTION
-const getBookByIdMiddleware = async (req, res, next) => {
-  try {
-    const bookIdResult = await Book.findById(req.params.bookId);
-    if (!bookIdResult) {
-      return res.status(404).json({ message: "Book not found" });
+  //MIDDLEWARE FUNCTION
+  const getBookByIdMiddleware = async (req, res, next) => {
+    try {
+      const bookIdResult = await Book.findById(req.params.bookId);
+      if (!bookIdResult) {
+        return res.status(404).json({ message: "Book not found" });
+      }
+      req.book = bookIdResult; // Attach the book to the request object
+      next(); // Call the next middleware
+    } catch (err) {
+      return res.status(500).json(err);
     }
-    req.book = bookIdResult; // Attach the book to the request object
-    next(); // Call the next middleware
-  } catch (err) {
-    return res.status(500).json(err);
-  }
-};
-
+  };
+  
   bookRouter
     //GET BY ID
     .route("/books/:bookId")
