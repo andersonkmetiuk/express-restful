@@ -6,6 +6,7 @@ function routes(Book) {
   const bookRouter = express.Router();
 
   bookRouter
+    //GET ROOT
     .route("/books")
     .get(async (req, res) => {
       try {
@@ -26,6 +27,7 @@ function routes(Book) {
     });
 
   bookRouter
+    //GET BY ID
     .route("/books/:bookId")
     .get(async (req, res) => {
       try {
@@ -35,6 +37,7 @@ function routes(Book) {
         return res.status(500).json(err);
       }
     })
+    //PUT
     .put(async (req, res) => {
       try {
         const bookIdResult = await Book.findById(req.params.bookId);
@@ -49,6 +52,7 @@ function routes(Book) {
         return res.status(500).json(err);
       }
     })
+    //PATCH
     .patch(async (req, res) => {
       try {
         const bookIdResult = await Book.findById(req.params.bookId);
@@ -71,6 +75,7 @@ function routes(Book) {
         return res.status(500).json(err);
       }
     })
+    //DELETE
     .delete(async(req, res) => {
       try {
         await Book.findByIdAndDelete(req.params.bookId);
