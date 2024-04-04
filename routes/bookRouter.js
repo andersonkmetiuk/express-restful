@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 const express = require("express");
-const mongoose = require("mongoose");
 
 function routes(Book) {
   const bookRouter = express.Router();
@@ -26,26 +25,44 @@ function routes(Book) {
       return res.status(201).json(book);
     });
 
+//MIDDLEWARE FUNCTION
+const getBookByIdMiddleware = async (req, res, next) => {
+  try {
+    const bookIdResult = await Book.findById(req.params.bookId);
+    if (!bookIdResult) {
+      return res.status(404).json({ message: "Book not found" });
+    }
+    req.book = bookIdResult; // Attach the book to the request object
+    next(); // Call the next middleware
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+};
+
   bookRouter
     //GET BY ID
     .route("/books/:bookId")
-    .get(async (req, res) => {
+    .get(getBookByIdMiddleware, async (req, res) => {
       try {
-        const bookIdResult = await Book.findById(req.params.bookId);
-        return res.status(200).json(bookIdResult);
+        // Ensure the book exists before attempting to send the response
+        if (!req.book) {
+          return res.status(404).json({ message: "Book not found" });
+        }
+        return res.status(200).json(req.book);
       } catch (err) {
-        return res.status(500).json(err);
+      console.error("Error fetching book:", err);
+      return res.status(500).json({ message: "Failed to fetch the book" });
       }
     })
     //PUT
-    .put(async (req, res) => {
+    .put(getBookByIdMiddleware, async (req, res) => {
       try {
-        const bookIdResult = await Book.findById(req.params.bookId);
+        const bookIdResult = req.book;
         bookIdResult.title = req.body.title;
         bookIdResult.author = req.body.author;
         bookIdResult.genre = req.body.genre;
         bookIdResult.read = req.body.read;
-        bookIdResult.save();
+        await bookIdResult.save(); // Ensure to use await here to wait for the save operation
 
         return res.status(200).json(bookIdResult);
       } catch (err) {
@@ -53,9 +70,9 @@ function routes(Book) {
       }
     })
     //PATCH
-    .patch(async (req, res) => {
+    .patch(getBookByIdMiddleware, async (req, res) => {
       try {
-        const bookIdResult = await Book.findById(req.params.bookId);
+        const bookIdResult = req.book;
         // This if deletes an id that is sent accidentally so it won't change the ID inside MongoDB
         // eslint-disable-next-line no-underscore-dangle
         if (req.body._id) {
@@ -69,19 +86,26 @@ function routes(Book) {
           bookIdResult[key] = value;
         });
 
-        bookIdResult.save();
+        await bookIdResult.save();
         return res.status(200).json(bookIdResult);
       } catch (err) {
         return res.status(500).json(err);
       }
     })
     //DELETE
-    .delete(async(req, res) => {
+    .delete(getBookByIdMiddleware, async (req, res) => {
       try {
+        const bookIdResult = req.book;
+        // Ensure the book exists before attempting deletion
+        if (!bookIdResult) {
+          return res.status(404).json({ message: "Book not found" });
+        }
+
         await Book.findByIdAndDelete(req.params.bookId);
-        return res.sendStatus(204); // No content, successful deletion
+        return res.json({ message: "Success!"}); // No content, successful deletion
       } catch (err) {
-        return res.status(500).json(err);
+        console.error("Error deleting book:", err);
+        return res.status(500).json({ message: "Failed to delete the book" });
       }
     });
 

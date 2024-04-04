@@ -339,3 +339,34 @@ The right way
       }
     });
 ```
+
+# Implementing Middleware
+
+Implemented a Middleware function to simplify the code. The below code was used in `GET`,`PUT` and `PATCH`
+
+```
+    .get(async (req, res) => {
+      try {
+        const bookIdResult = await Book.findById(req.params.bookId);
+        return res.status(200).json(bookIdResult);
+      } catch (err) {
+        return res.status(500).json(err);
+      }
+    })
+```
+
+The `Middleware` function looks like this
+```
+const getBookByIdMiddleware = async (req, res, next) => {
+  try {
+    const bookIdResult = await Book.findById(req.params.bookId);
+    if (!bookIdResult) {
+      return res.status(404).json({ message: "Book not found" });
+    }
+    req.book = bookIdResult; // Attach the book to the request object
+    next(); // Call the next middleware
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+};
+```
