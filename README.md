@@ -261,7 +261,7 @@ Example: localhost:4000/api/books?genre=Fantasy
     })
 ```
 
-# Implementing PUT
+### Implementing PUT
 
 ```
     .put(async (req, res) => {
@@ -280,7 +280,7 @@ Example: localhost:4000/api/books?genre=Fantasy
     });
 ```
 
-# Implementing PATCH
+### Implementing PATCH
 
 The easy way
 
@@ -332,7 +332,7 @@ The right way
     });
 ```
 
-# Implementing DELETE
+### Implementing DELETE
 
 ```
     .delete(async(req, res) => {
@@ -345,7 +345,7 @@ The right way
     });
 ```
 
-# Implementing Middleware
+### Implementing Middleware
 
 Implemented a Middleware function to simplify the code. The below code was used in `GET`,`PUT` and `PATCH`
 
@@ -377,7 +377,7 @@ const getBookByIdMiddleware = async (req, res, next) => {
 };
 ```
 
-# Added Controller
+### Added Controller
 
 ```
 function booksController(Book) {
@@ -410,7 +410,7 @@ function booksController(Book) {
 module.exports = booksController;
 ```
 
-# Added Unit Testing
+### Added Unit Testing
 
 `npm install -D mocha should sinon`
 
