@@ -91,6 +91,7 @@ Added `nodemon`. For this there are two configurations in the `package.json`
 ```
 
 and also the configs
+
 ```
 "nodemonConfig": {
     "restartable": "rs",
@@ -103,9 +104,9 @@ and also the configs
       "PORT": 4000
     }
   }
-  ```
+```
 
-Just run  `npm start` and it will run on port 4000 (http://localhost:4000) and this restarts every time you save so you don't need to run it every time. 
+Just run `npm start` and it will run on port 4000 (http://localhost:4000) and this restarts every time you save so you don't need to run it every time.
 
 ### Starting to build the api
 
@@ -141,6 +142,7 @@ app.listen(port, () => {
 ### Simple API Call
 
 Added `booksJson.js` into `MongoDB` database. Added a `bookModel.js` to match the book models for `mongoose`
+
 ```
 const express = require("express");
 const mongoose = require("mongoose");
@@ -277,9 +279,11 @@ Example: localhost:4000/api/books?genre=Fantasy
       }
     });
 ```
+
 # Implementing PATCH
 
 The easy way
+
 ```
     .patch(async (req, res) => {
       try {
@@ -288,7 +292,7 @@ The easy way
           bookIdResult.title = req.body.title;
         if(req.body.author)
           bookIdResult.author = req.body.author;
-        if(req.body.genre) 
+        if(req.body.genre)
           bookIdResult.genre = req.body.genre;
         if(req.body.read)
           bookIdResult.read = req.body.read;
@@ -302,6 +306,7 @@ The easy way
 ```
 
 The right way
+
 ```
     .patch(async (req, res) => {
       try {
@@ -356,6 +361,7 @@ Implemented a Middleware function to simplify the code. The below code was used 
 ```
 
 The `Middleware` function looks like this
+
 ```
 const getBookByIdMiddleware = async (req, res, next) => {
   try {
@@ -372,6 +378,7 @@ const getBookByIdMiddleware = async (req, res, next) => {
 ```
 
 # Added Controller
+
 ```
 function booksController(Book) {
   async function post(req, res) {
@@ -401,4 +408,90 @@ function booksController(Book) {
 }
 
 module.exports = booksController;
+```
+
+# Added Unit Testing
+
+`npm install -D mocha should sinon`
+
+- mocha: testing framework
+- should: assertion framework
+- sinon: mocking
+
+We need to setup up the test in the `package.json` file. This is going to run every test in the `tests` folder that ends with `Tests.js`
+`"test": "mocha tests/**/*Tests.js"`
+
+You just need to do an `npm run test` or simply `npm test`
+
+```
+const should = require("should");
+const sinon = require("sinon");
+const booksController = require("../controllers/booksController");
+
+describe("Book Controller Tests:", () => {
+  describe("Post", () => {
+    it("should not allow an empty title on post", async () => {
+      // Mock book object for using in the test (this function book does nothing)
+      const Book = function (book) {
+        this.save = () => {}; // Mock save method
+      };
+
+      // Request with missing title
+      const req = {
+        body: {
+          author: "Jon",
+        },
+      };
+
+      // sinon is going to verify whats is being called and how many times with this spy method
+      const res = {
+        status: sinon.spy(),
+        send: sinon.spy(),
+        json: sinon.spy(),
+      };
+
+      // create instances for using in the test
+      const controller = booksController(Book);
+      await controller.post(req, res);
+
+      // should is going to check for errors
+      res.status
+        .calledWith(400)
+        .should.equal(true, `Bad Status ${res.status.args[0]}`);
+      res.json.calledWith({ message: "Title is required!" }).should.equal(true);
+    });
+
+    it("should save book when title is provided", async () => {
+      // Mock Book model
+      const Book = function (book) {
+        this.save = () => {}; // Mock save method
+      };
+
+      // Request with valid data
+      const req = {
+        body: {
+          title: "Sample Title",
+          author: "Jon",
+        },
+      };
+
+      // Response mocks
+      const res = {
+        status: sinon.spy(),
+        send: sinon.spy(),
+        json: sinon.spy(),
+      };
+
+      // Controller function
+      const controller = booksController(Book);
+      await controller.post(req, res);
+
+      // Assertions
+      res.status
+        .calledWith(201)
+        .should.equal(true, `Status should be 201 Created`);
+      res.json.called.should.equal(true, `Response should be JSON`);
+    });
+  });
+});
 ```

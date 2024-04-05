@@ -3,9 +3,18 @@ function booksController(Book) {
     try {
       const book = new Book(req.body);
       await book.save(); // Make sure to await the save operation
-      return res.status(201).json(book);
+
+      if (!req.body.title) {
+        res.status(400);
+        return res.json({ message: "Title is required!" });
+      }
+
+      // in order to run unit tests we need to separate the calls
+      res.status(201);
+      return res.json(book);
     } catch (err) {
-      return res.status(500).json(err);
+      res.status(500);
+      return res.json(err);
     }
   }
 
@@ -16,9 +25,12 @@ function booksController(Book) {
         query.genre = req.query.genre;
       }
       const bookResult = await Book.find(query);
-      return res.status(200).json(bookResult);
+
+      res.status(200);
+      return res.json(bookResult);
     } catch (err) {
-      return res.status(500).json(err);
+      res.status(500);
+      return res.json(err);
     }
   }
 
