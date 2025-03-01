@@ -1,28 +1,40 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+require("dotenv").config();
 
 const app = express();
 
 //this is declared for using the test environment when doing an Integration Test
+let dbConnectionString;
 if (process.env.ENV === "Test") {
-  console.log('*----------------------------------------------*');
-  console.log('This is a TEST in the DEV Environment');
   console.log("*----------------------------------------------*");
-
-  const db = mongoose.connect("mongodb://localhost/bookAPI-DEV");
-} else if (process.env.ENV === "dev"){
+  console.log("This is a TEST in the DEV Environment");
+  console.log("*----------------------------------------------*");
+  dbConnectionString = "mongodb://localhost/bookAPI-DEV";
+} else if (process.env.ENV === "dev") {
   console.log("*----------------------------------------------*");
   console.log("This is a DEV Environment");
   console.log("*----------------------------------------------*");
-
-  const db = mongoose.connect("mongodb://localhost/bookAPI-DEV");
+  dbConnectionString = "mongodb://localhost/bookAPI-DEV";
 } else {
   console.log("*----------------------------------------------*");
-  console.log('This is the Production environment');
+  console.log("This is the Production environment");
   console.log("*----------------------------------------------*");
-  const db = mongoose.connect("mongodb://localhost/bookAPI");
+  dbConnectionString = "mongodb://localhost/bookAPI";
 }
+
+//database connection
+mongoose
+  .connect(dbConnectionString, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Successfully connected to the database"))
+  .catch((err) => {
+    console.error("Error connecting to the database", err);
+    process.exit(1); // Exit the process if connection fails
+  });
 
 const port = process.env.PORT || 3000; // port or default to 3000
 const Book = require("./models/bookModel");

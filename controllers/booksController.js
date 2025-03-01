@@ -9,9 +9,17 @@ function booksController(Book) {
         return res.json({ message: "Title is required!" });
       }
 
+      //format the response to improve the view of the data
+      const formattedBook = {
+      id: book._id, // Change _id for id
+      title: book.title,
+      genre: book.genre,
+      author: book.author,
+      read: book.read,
+    };
       // in order to run unit tests we need to separate the calls
       res.status(201);
-      return res.json(book);
+      return res.json(formattedBook);
     } catch (err) {
       res.status(500);
       return res.json(err);
@@ -24,10 +32,21 @@ function booksController(Book) {
       if (req.query.genre) {
         query.genre = req.query.genre;
       }
-      const bookResult = await Book.find(query);
+      //.lean() simplifies the result, removing the wrapper from Mongoose
+      const bookResult = await Book.find(query).lean();
+      // Change the _id for id
+      const formattedBooks = bookResult.map((book) => {
+        return {
+          id: book._id, // Renomeia o _id para id
+          title: book.title,
+          genre: book.genre,
+          author: book.author,
+          read: book.read,
+        };
+      });
 
       res.status(200);
-      return res.json(bookResult);
+      return res.json(formattedBooks);
     } catch (err) {
       res.status(500);
       return res.json(err);

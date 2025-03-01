@@ -606,16 +606,6 @@ npm run start
 npm run dev
 ```
 
-For this script to work we have added the `cross-env` library for running it on Windows
-```
-"dev": "cross-env ENV=dev nodemon app.js",
-```
-
-In Linux you just need to set it like this:
-```
-"dev": "ENV=development nodemon app.js",
-```
-
 ### Unit Tests
 
 ```
@@ -625,4 +615,11 @@ npm run test
 Note that in the tests folder we have the environment set for dev
 ```
 process.env.ENV = "Test";
+```
+
+### .env
+```
+ENV=dev
+NODE_ENV=development
+PORT=4000
 ```
