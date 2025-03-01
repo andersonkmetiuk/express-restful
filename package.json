@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "eslint .",
     "start": "nodemon app.js",
+    "dev": "cross-env ENV=dev nodemon app.js",
     "test": "mocha tests/**/*Tests.js"
   },
   "author": "",
@@ -17,6 +18,7 @@
     "nodemon": "^3.1.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.29.1",

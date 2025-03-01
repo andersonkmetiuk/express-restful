@@ -1,4 +1,9 @@
-db.books.insert([
+//use the correct name of your database
+// use("bookAPI");
+use("bookAPI-DEV")
+
+//books for feeding the database
+db.books.insertMany([
 {
 	title: 'War and Peace',
 	genre: 'Historical Fiction',
@@ -48,3 +53,5 @@ db.books.insert([
 	read: false
 }
 ])
+
+print("Books added!");

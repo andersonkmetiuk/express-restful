@@ -563,3 +563,66 @@ if (process.env.ENV === "Test") {
   const db = mongoose.connect("mongodb://localhost/bookAPI");
 }
 ```
+
+---
+
+## Extras
+
+### Basic setup for MongoDB Compass (On-Premises)
+
+First install **MongoDB Community Server** and we are going to use the **MongoDB Compass** to create the database locally. Install also the **mongodb shell (mongosh)**. After the installation open MongoDB Compass and create a new database. For this project the database is configured to use the name as **bookAPI** or **bookAPI-DEV**. If you want to change the database name you need to update this line in the **app.js** file:
+```
+const db = mongoose.connect("mongodb://localhost/bookAPI-DEV");
+const db = mongoose.connect("mongodb://localhost/bookAPI");
+```
+
+Now we need to export the **booksJson.js** to the database. Be sure to change the following line inside the file to match the database 
+```
+use("bookAPI");
+```
+
+### Powershell
+
+```
+Get-Content booksJson.js | mongosh
+```
+
+### Bash
+
+```
+mongosh < booksJson.js
+```
+
+## Scripts
+
+### PRD
+
+```
+npm run start
+```
+
+### DEV
+```
+npm run dev
+```
+
+For this script to work we have added the `cross-env` library for running it on Windows
+```
+"dev": "cross-env ENV=dev nodemon app.js",
+```
+
+In Linux you just need to set it like this:
+```
+"dev": "ENV=development nodemon app.js",
+```
+
+### Unit Tests
+
+```
+npm run test
+```
+
+Note that in the tests folder we have the environment set for dev
+```
+process.env.ENV = "Test";
+```

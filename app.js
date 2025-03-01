@@ -11,6 +11,12 @@ if (process.env.ENV === "Test") {
   console.log("*----------------------------------------------*");
 
   const db = mongoose.connect("mongodb://localhost/bookAPI-DEV");
+} else if (process.env.ENV === "dev"){
+  console.log("*----------------------------------------------*");
+  console.log("This is a DEV Environment");
+  console.log("*----------------------------------------------*");
+
+  const db = mongoose.connect("mongodb://localhost/bookAPI-DEV");
 } else {
   console.log("*----------------------------------------------*");
   console.log('This is the Production environment');
