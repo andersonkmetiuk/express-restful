@@ -617,7 +617,7 @@ npm run test
 
 Note that in the tests folder we have the environment set for dev
 ```
-process.env.ENV = "Test";
+process.env.ENV = "test";
 ```
 
 ### .env
