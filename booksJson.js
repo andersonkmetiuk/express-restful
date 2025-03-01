@@ -1,6 +1,14 @@
+/*
+Powershell
+Get-Content booksJson.js | mongosh
+
+Bash
+mongosh < booksJson.js
+*/
+
 //use the correct name of your database
-// use("bookAPI");
-use("bookAPI-DEV")
+use("bookAPI");
+// use("bookAPI-DEV")
 
 //books for feeding the database
 db.books.insertMany([

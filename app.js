@@ -2,12 +2,15 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 require("dotenv").config();
+console.log("ENV:", process.env.ENV);
+console.log("PORT:", process.env.NODE_ENV);
+console.log("PORT:", process.env.PORT);
 
 const app = express();
 
 //this is declared for using the test environment when doing an Integration Test
 let dbConnectionString;
-if (process.env.ENV === "Test") {
+if (process.env.ENV === "test") {
   console.log("*----------------------------------------------*");
   console.log("This is a TEST in the DEV Environment");
   console.log("*----------------------------------------------*");

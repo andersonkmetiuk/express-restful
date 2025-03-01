@@ -595,16 +595,19 @@ mongosh < booksJson.js
 
 ## Scripts
 
-### PRD
+### npm run
 
 ```
 npm run start
 ```
 
-### DEV
+or
+
 ```
 npm run dev
 ```
+
+this is going to run according to your .env settings
 
 ### Unit Tests
 

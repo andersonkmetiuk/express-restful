@@ -3,7 +3,7 @@ const request = require("supertest");
 const mongoose = require("mongoose");
 
 //env variable for test environment, not Production
-process.env.ENV = "Test";
+process.env.ENV = "test";
 //this process.env.ENV should be before the app to work
 const app = require("../app.js");
 
