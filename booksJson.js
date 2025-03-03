@@ -71,9 +71,7 @@ mongosh
 
 use bookAPI
 
- db.books.updateOne(
-  { title: "Les Mis?rables" },
-  { $set: { title: "Les Misérables" } }
-);
+db.books.updateOne({ title: "Les Mis??rables" },{ $set: { title: "Les Misérables" } });
 
+db.books.updateOne({ title: "Les Mis?rables" },{ $set: { title: "Les Misérables" } });
  */
