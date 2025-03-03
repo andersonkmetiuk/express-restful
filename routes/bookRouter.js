@@ -1,18 +1,18 @@
 /* eslint-disable no-param-reassign */
 const express = require("express");
-const booksController = require("../controllers/booksController")
+const booksController = require("../controllers/booksController");
 
 function routes(Book) {
   const bookRouter = express.Router();
   const controller = booksController(Book);
 
   bookRouter
-    //GET ROOT
+    // GET ROOT
     .route("/books")
     .get(controller.get)
     .post(controller.post);
 
-  //MIDDLEWARE FUNCTION
+  // MIDDLEWARE FUNCTION
   const getBookByIdMiddleware = async (req, res, next) => {
     try {
       const bookIdResult = await Book.findById(req.params.bookId);
@@ -25,9 +25,9 @@ function routes(Book) {
       return res.status(500).json(err);
     }
   };
-  
+
   bookRouter
-    //GET BY ID
+    // GET BY ID
     .route("/books/:bookId")
     .get(getBookByIdMiddleware, async (req, res) => {
       try {
@@ -35,13 +35,23 @@ function routes(Book) {
         if (!req.book) {
           return res.status(404).json({ message: "Book not found" });
         }
-        return res.status(200).json(req.book);
+
+        // Format the response to return 'id' instead of '_id'
+        const formattedBook = {
+          id: req.book._id, // Rename '_id' to 'id'
+          title: req.book.title,
+          genre: req.book.genre,
+          author: req.book.author,
+          read: req.book.read,
+        };
+
+        return res.status(200).json(formattedBook); // Return the book with 'id'
       } catch (err) {
-      console.error("Error fetching book:", err);
-      return res.status(500).json({ message: "Failed to fetch the book" });
+        console.error("Error fetching book:", err);
+        return res.status(500).json({ message: "Failed to fetch the book" });
       }
     })
-    //PUT
+    // PUT
     .put(getBookByIdMiddleware, async (req, res) => {
       try {
         const bookIdResult = req.book;
@@ -56,7 +66,7 @@ function routes(Book) {
         return res.status(500).json(err);
       }
     })
-    //PATCH
+    // PATCH
     .patch(getBookByIdMiddleware, async (req, res) => {
       try {
         const bookIdResult = req.book;
@@ -79,7 +89,7 @@ function routes(Book) {
         return res.status(500).json(err);
       }
     })
-    //DELETE
+    // DELETE
     .delete(getBookByIdMiddleware, async (req, res) => {
       try {
         const bookIdResult = req.book;
@@ -89,7 +99,7 @@ function routes(Book) {
         }
 
         await Book.findByIdAndDelete(req.params.bookId);
-        return res.json({ message: "Success!"}); // No content, successful deletion
+        return res.json({ message: "Success!" }); // No content, successful deletion
       } catch (err) {
         console.error("Error deleting book:", err);
         return res.status(500).json({ message: "Failed to delete the book" });

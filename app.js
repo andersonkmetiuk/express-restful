@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const cors = require("cors"); // for receiving frontend requests
+
 require("dotenv").config();
 console.log("ENV:", process.env.ENV);
 console.log("PORT:", process.env.NODE_ENV);
@@ -8,7 +10,22 @@ console.log("PORT:", process.env.PORT);
 
 const app = express();
 
-//this is declared for using the test environment when doing an Integration Test
+// Backend using UTF-8
+app.use((req, res, next) => {
+  res.setHeader("Content-Type", "application/json; charset=UTF-8");
+  next();
+});
+
+// Use CORS to allow requests from any source
+app.use(cors());
+
+// If you wanna restrict the source you can use:
+// app.use(cors({
+//   origin: 'http://localhost:5173',
+// }));
+
+
+
 let dbConnectionString;
 if (process.env.ENV === "test") {
   console.log("*----------------------------------------------*");
